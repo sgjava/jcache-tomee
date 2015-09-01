@@ -1,0 +1,108 @@
+/*
+ * Copyright (c) Steven P. Goldsmith. All rights reserved.
+ *
+ * Created by Steven P. Goldsmith on September 1, 2015
+ * sgoldsmith@codeferm.com
+ */
+package com.codeferm.jcache.tomee;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.cache.Cache;
+import javax.ejb.EJB;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+/**
+ * Service to work with UserDto an test caching.
+ *
+ * @author sgoldsmith
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+@Path("/user/v1")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class UserService {
+
+    /**
+     * Logger.
+     */
+    //CHECKSTYLE:OFF ConstantName - Logger OK to be static final and lower case
+    private static final Logger log = Logger.getLogger(UserService.class.
+            getName());
+    //CHECKSTYLE:ON ConstantName
+    /**
+     * Injected cache bean.
+     */
+    @EJB
+    private CacheBean cacheBean;
+    /**
+     * Our key/value bean.
+     */
+    @EJB
+    private KeyValueBean keyValueBean;
+    /**
+     * Direct access to cache.
+     */
+    private Cache<String, String> testCache;
+
+    /**
+     * Get instance of cache in order to get contents.
+     */
+    @PostConstruct
+    public final void init() {
+        log.info("PostConstruct");
+        testCache = cacheBean.getCacheManager().getCache("testCache");
+    }
+
+    /**
+     * D0 any clean up.
+     */
+    @PreDestroy
+    public final void done() {
+        log.info("PreDestroy");
+    }
+
+    /**
+     * Get Map representation of cache.
+     *
+     * @return Map with cache contents.
+     */
+    @Path("/getmap")
+    @GET
+    public final Response getMap() {
+        final Map<String, String> map = new HashMap<>();
+        Iterator<Cache.Entry<String, String>> allCacheEntries = testCache.
+                iterator();
+        while (allCacheEntries.hasNext()) {
+            Cache.Entry<String, String> currentEntry = allCacheEntries.next();
+            map.put(currentEntry.getKey(), currentEntry.getValue());
+        }
+        return Response.ok(map).build();
+    }
+
+    /**
+     * Cache user info. CDI bean keyValueBean is used for caching.
+     *
+     * @param userDto User DTO.
+     * @return Populated User DTO.
+     */
+    @Path("/userinfo")
+    @POST
+    public final Response userInfo(final UserDto userDto) {
+        log.info(String.format("userDto: %s", userDto.toString()));
+        keyValueBean.slowMethod(userDto.getUserName(), userDto.getFullName());
+        // Return VersionDto
+        return Response.ok(userDto).build();
+    }
+}

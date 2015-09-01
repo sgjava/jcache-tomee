@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) Steven P. Goldsmith. All rights reserved.
+
+Created by Steven P. Goldsmith on September 1, 2015
+sgoldsmith@codeferm.com
+-->
+<Context path="/jcache-tomee">
+    <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="20" />
+</Context>
