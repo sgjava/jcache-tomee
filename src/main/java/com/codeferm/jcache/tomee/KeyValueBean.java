@@ -21,7 +21,8 @@ import javax.ejb.Stateless;
  * @since 1.0.0
  */
 @Stateless
-@CacheDefaults(cacheName = "testCache")
+@CacheDefaults(cacheName = "testCache", cacheKeyGenerator
+        = StringKeyGenerator.class)
 public class KeyValueBean {
 
     /**

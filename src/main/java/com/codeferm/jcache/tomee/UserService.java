@@ -54,7 +54,7 @@ public class UserService {
     /**
      * Direct access to cache.
      */
-    private Cache<String, String> testCache;
+    private Cache<StringGeneratedCacheKey, String> testCache;
 
     /**
      * Get instance of cache in order to get contents.
@@ -81,11 +81,12 @@ public class UserService {
     @Path("/getmap")
     @GET
     public final Response getMap() {
-        final Map<String, String> map = new HashMap<>();
-        Iterator<Cache.Entry<String, String>> allCacheEntries = testCache.
-                iterator();
+        final Map<StringGeneratedCacheKey, String> map = new HashMap<>();
+        Iterator<Cache.Entry<StringGeneratedCacheKey, String>> allCacheEntries
+                = testCache.iterator();
         while (allCacheEntries.hasNext()) {
-            Cache.Entry<String, String> currentEntry = allCacheEntries.next();
+            Cache.Entry<StringGeneratedCacheKey, String> currentEntry
+                    = allCacheEntries.next();
             map.put(currentEntry.getKey(), currentEntry.getValue());
         }
         return Response.ok(map).build();

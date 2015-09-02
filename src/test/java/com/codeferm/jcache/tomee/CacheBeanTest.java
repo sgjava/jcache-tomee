@@ -94,19 +94,27 @@ public class CacheBeanTest {
         keyValueBean.slowMethod("key3", "value3");
         // See if existing key added to cache
         keyValueBean.slowMethod("key1", "value1");
-        final Cache<String, String> testCache = cacheBean.getCacheManager().
+        final Cache<StringGeneratedCacheKey, String> testCache = cacheBean.
+                getCacheManager().
                 getCache("testCache");
         final Map<String, String> map = new HashMap<>();
-        Iterator<Cache.Entry<String, String>> allCacheEntries = testCache.
+        Iterator<Cache.Entry<StringGeneratedCacheKey, String>> allCacheEntries
+                = testCache.
                 iterator();
         while (allCacheEntries.hasNext()) {
-            Cache.Entry<String, String> currentEntry = allCacheEntries.next();
-            map.put(currentEntry.getKey(), currentEntry.getValue());
+            Cache.Entry<StringGeneratedCacheKey, String> currentEntry
+                    = allCacheEntries.next();
+            map.put(currentEntry.getKey().toString(), currentEntry.getValue());
         }
-        testCache.close();
         assertNotNull(map);
         // We added 3 unique keys to cache
         assertEquals(map.size(), 3);
         log.info(String.format("Map of cache: %s", map));
+        // Let's try looking up by key
+        final StringGeneratedCacheKey key = new StringGeneratedCacheKey("key1");
+        final String value = testCache.get(key);
+        assertNotNull(value);
+        assertEquals(value, "value1");
+        testCache.close();
     }
 }
