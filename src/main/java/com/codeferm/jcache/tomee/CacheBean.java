@@ -57,7 +57,8 @@ public class CacheBean {
     }
 
     /**
-     * Using EHCache provider configured via ehcache.xml in classpath.
+     * Using EHCache provider configured via ehcache.xml in classpath. Set
+     * system properties for ehcache.xml substitution.
      */
     //CHECKSTYLE:OFF DesignForExtension - CDI beans cannot have final methods
     @PostConstruct
