@@ -15,17 +15,44 @@
     <defaultCache
         maxEntriesLocalHeap="1000000"
         eternal="false"
-        timeToIdleSeconds="86400"
-        timeToLiveSeconds="86400"
+        timeToIdleSeconds="600"
+        timeToLiveSeconds="600"
         memoryStoreEvictionPolicy="LRU">
     </defaultCache>
 
+    <cacheManagerPeerProviderFactory
+        class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+        properties="peerDiscovery=manual, rmiUrls=//${ehcache.providerHost}:${ehcache.providerPort}/testCache"
+        propertySeparator="," />
+
+    <cacheManagerPeerListenerFactory
+        class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+        properties="hostName=${ehcache.listenerHost}, port=${ehcache.listenerPort}, socketTimeoutMillis=120000"
+        propertySeparator=","/>    
+
     <cache name="testCache"
-           maxEntriesLocalHeap="1000000"
+           maxBytesLocalHeap="500M"
            eternal="false"
-           timeToIdleSeconds="600"
-           timeToLiveSeconds="600"
-           memoryStoreEvictionPolicy="LFU">
+           timeToIdleSeconds="${ehcache.timeToIdleSeconds}"
+           timeToLiveSeconds="${ehcache.timeToLiveSeconds}"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+
+        <!-- RMI replication listener -->
+        <cacheEventListenerFactory
+            class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+            properties="replicateAsynchronously=true,
+                 replicatePuts=true,
+                 replicatePutsViaCopy=true,
+                 replicateUpdates=true,
+                 replicateUpdatesViaCopy=true,
+                 replicateRemovals=true" />
+
+        <!-- RMI Cache bootstrap -->
+        <bootstrapCacheLoaderFactory
+            class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
+            properties="bootstrapAsynchronously=true, maximumChunkSizeBytes=5000000"
+            propertySeparator="," />                
     </cache>
 
 </ehcache>

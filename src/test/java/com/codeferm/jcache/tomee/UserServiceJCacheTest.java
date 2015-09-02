@@ -53,6 +53,14 @@ public class UserServiceJCacheTest {
     public static void setUpClass() {
         try {
             log.info("setUpClass()");
+            // Set system properties for ehcache.xml substitution
+            System.setProperty("ehcache.timeToIdleSeconds", "600");
+            System.setProperty("ehcache.timeToLiveSeconds", "600");
+            System.setProperty("ehcache.providerHost", "localhost");
+            System.setProperty("ehcache.providerPort", "8000");
+            System.setProperty("ehcache.listenerHost", "localhost");
+            System.setProperty("ehcache.listenerPort", "8000");
+            // tomee-embedded configuration
             configuration = new Configuration().randomHttpPort();
             container = new Container();
             container.setup(configuration);
