@@ -9,8 +9,11 @@ package com.codeferm.jcache.tomee;
 import java.util.logging.Logger;
 import javax.cache.annotation.CacheDefaults;
 import javax.cache.annotation.CacheKey;
+import javax.cache.annotation.CachePut;
+import javax.cache.annotation.CacheRemove;
 import javax.cache.annotation.CacheRemoveAll;
 import javax.cache.annotation.CacheResult;
+import javax.cache.annotation.CacheValue;
 import javax.ejb.Stateless;
 
 /**
@@ -47,6 +50,31 @@ public class KeyValueBean {
     public String slowMethod(@CacheKey final String key, final String value) {
         log.info(String.format("Adding key: %s, value: %s", key, value));
         return value;
+    }
+
+    /**
+     * Put value in cache.
+     *
+     * @param key Key.
+     * @param value Value.
+     */
+    //CHECKSTYLE:OFF DesignForExtension - CDI beans cannot have final methods
+    @CachePut
+    //CHECKSTYLE:ON DesignForExtension
+    public void add(@CacheKey final String key, @CacheValue final String value) {
+        log.info(String.format("Adding key: %s, value: %s", key, value));
+    }
+
+    /**
+     * Remove value in cache.
+     *
+     * @param key Key.
+     */
+    //CHECKSTYLE:OFF DesignForExtension - CDI beans cannot have final methods
+    @CacheRemove
+    //CHECKSTYLE:ON DesignForExtension
+    public void remove(@CacheKey final String key) {
+        log.info(String.format("Removing key: %s", key));
     }
 
     /**
