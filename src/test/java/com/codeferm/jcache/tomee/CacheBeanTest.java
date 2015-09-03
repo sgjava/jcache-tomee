@@ -110,7 +110,7 @@ public class CacheBeanTest {
             }
             assertNotNull(map);
             // We added 3 unique keys to cache
-            assertEquals(map.size(), 3);
+            assertEquals(3, map.size());
             log.info(String.format("Map of cache: %s", map));
             // Let's try looking up by key
             final StringGeneratedCacheKey key = new StringGeneratedCacheKey(

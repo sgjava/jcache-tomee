@@ -18,6 +18,6 @@
 * Unit tests provide examples
 * JAX-RS using CDI bean and JCache annotations
 * Stand alone EJB container using CDI bean and JCache annotations
-* Uses Ehcache provider and system properties to custom configure cache
+* Uses Ehcache or Apache JCS provider
 * GeneratedCacheKey using String
 * Uses javax.cache.* only! No net.sf.ehcache.* imports used
