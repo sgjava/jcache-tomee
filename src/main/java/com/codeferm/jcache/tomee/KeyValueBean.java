@@ -49,6 +49,7 @@ public class KeyValueBean {
     //CHECKSTYLE:ON DesignForExtension
     public String slowMethod(@CacheKey final String key, final String value) {
         log.info(String.format("Adding key: %s, value: %s", key, value));
+        // Do something slow
         return value;
     }
 
