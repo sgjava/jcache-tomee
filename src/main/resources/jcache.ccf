@@ -1,0 +1,22 @@
+# Copyright (c) Codeferm. All rights reserved.
+#
+# Dev configuration file for Apache JCS.
+#
+# Created by Steven P. Goldsmith on September 3, 2015
+# sgoldsmith@codeferm.com
+
+jcs.region.testCache=DC
+jcs.region.testCache.cacheattributes=org.apache.commons.jcs.engine.CompositeCacheAttributes
+jcs.region.testCache.cacheattributes.MaxObjects=200001
+jcs.region.testCache.cacheattributes.MemoryCacheName=org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache
+jcs.region.testCache.cacheattributes.UseMemoryShrinker=true
+jcs.region.testCache.cacheattributes.MaxMemoryIdleTimeSeconds=3600
+jcs.region.testCache.cacheattributes.ShrinkerIntervalSeconds=60
+jcs.region.testCache.elementattributes=org.apache.commons.jcs.engine.ElementAttributes
+jcs.region.testCache.elementattributes.IsEternal=false
+jcs.region.testCache.elementattributes.MaxLife=600
+jcs.region.testCache.elementattributes.IdleTime=1800
+jcs.region.testCache.elementattributes.IsSpool=true
+jcs.region.testCache.elementattributes.IsRemote=true
+jcs.region.testCache.elementattributes.IsLateral=true
+
