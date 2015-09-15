@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
@@ -45,6 +46,10 @@ public class CacheBean {
      * Cache manager.
      */
     private CacheManager cacheManager;
+    /**
+     * Cache.
+     */
+    private Cache<StringGeneratedCacheKey, String> cache;
 
     /**
      * Get cache manager.
@@ -55,6 +60,10 @@ public class CacheBean {
     public CacheManager getCacheManager() {
         //CHECKSTYLE:ON DesignForExtension
         return cacheManager;
+    }
+
+    public Cache<StringGeneratedCacheKey, String> getCache() {
+        return cache;
     }
 
     /**
@@ -70,9 +79,9 @@ public class CacheBean {
         //cacheManager = cachingProvider.getCacheManager();
         log.info("getCacheManager");
         cacheManager = cachingProvider.getCacheManager(new File(
-                "src/main/resources/jcache.ccf").toURI(),
-                Thread.currentThread().getContextClassLoader(), cachingProvider.
-                getDefaultProperties());
+                "src/config/ehcache.xml").toURI(), null, null);
+        log.info("getCache");
+        cache = cacheManager.getCache("testCache");
     }
 
     /**
