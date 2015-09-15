@@ -14,7 +14,9 @@ import javax.cache.annotation.CacheRemove;
 import javax.cache.annotation.CacheRemoveAll;
 import javax.cache.annotation.CacheResult;
 import javax.cache.annotation.CacheValue;
-import javax.ejb.Stateless;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.ejb.Singleton;
 
 /**
  * Stateless bean using JCache annotations.
@@ -23,7 +25,8 @@ import javax.ejb.Stateless;
  * @version 1.0.0
  * @since 1.0.0
  */
-@Stateless
+@Singleton
+@Lock(LockType.READ)
 @CacheDefaults(cacheName = "testCache", cacheKeyGenerator
         = StringKeyGenerator.class)
 public class KeyValueBean {

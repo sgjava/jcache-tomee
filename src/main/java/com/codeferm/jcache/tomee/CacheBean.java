@@ -6,6 +6,7 @@
  */
 package com.codeferm.jcache.tomee;
 
+import java.io.File;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -66,7 +67,12 @@ public class CacheBean {
     public void init() {
         log.info("PostConstruct");
         cachingProvider = Caching.getCachingProvider();
-        cacheManager = cachingProvider.getCacheManager();
+        //cacheManager = cachingProvider.getCacheManager();
+        log.info("getCacheManager");
+        cacheManager = cachingProvider.getCacheManager(new File(
+                "src/main/resources/jcache.ccf").toURI(),
+                Thread.currentThread().getContextClassLoader(), cachingProvider.
+                getDefaultProperties());
     }
 
     /**
