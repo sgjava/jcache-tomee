@@ -6,19 +6,24 @@
  */
 package com.codeferm.jcache.tomee;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Logger;
+import javax.cache.Cache;
 import javax.ejb.EJB;
 import javax.ejb.embeddable.EJBContainer;
 import javax.naming.NamingException;
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test CDI beans injected into test. testCache =
- * cacheBean.getCacheManager().getCache("testCache") does not work because it
- * creates a cache using the default parameters.
+ * Test CDI beans injected into test.
  *
  * @author sgoldsmith
  * @version 1.0.0
@@ -55,8 +60,15 @@ public class CacheBeanTest {
     public final void setUp() throws NamingException {
         log.info("setUp()");
         // Set system properties for ehcache.xml substitution
-        System.setProperty("ehcache.timeToIdleSeconds", "600");
-        System.setProperty("ehcache.timeToLiveSeconds", "600");
+        System.setProperty("ehcache.short.timeToIdleSeconds", "600");
+        System.setProperty("ehcache.short.timeToLiveSeconds", "600");
+        System.setProperty("ehcache.short.maxBytesLocalHeap", "100M");
+        System.setProperty("ehcache.med.timeToIdleSeconds", "3600");
+        System.setProperty("ehcache.med.timeToLiveSeconds", "3600");
+        System.setProperty("ehcache.med.maxBytesLocalHeap", "100M");
+        System.setProperty("ehcache.long.timeToIdleSeconds", "86400");
+        System.setProperty("ehcache.long.timeToLiveSeconds", "86400");
+        System.setProperty("ehcache.long.maxBytesLocalHeap", "100M");
         System.setProperty("ehcache.providerHost", "localhost");
         System.setProperty("ehcache.providerPort", "8000");
         System.setProperty("ehcache.listenerHost", "localhost");
@@ -80,20 +92,123 @@ public class CacheBeanTest {
      * Test JSR-107 @CacheResult.
      */
     @Test
-    public final void cacheResult() {
-        log.info("cacheResult");
+    public final void cacheResultShort() {
+        log.info("cacheResultShort");
         assertNotNull(keyValueBean);
         log.info(String.format("Cache names: %s", cacheBean.getCacheManager().
                 getCacheNames()));
         // Let's clear the cache
         keyValueBean.invalidateCache();
         // Add some stuff
-        keyValueBean.slowMethod("key1", "value1");
-        keyValueBean.slowMethod("key2", "value2");
-        keyValueBean.slowMethod("key3", "value3");
+        keyValueBean.shortResult("key1", "value1");
+        keyValueBean.shortResult("key2", "value2");
+        keyValueBean.shortResult("key3", "value3");
         // See if existing key added to cache (check log)
-        keyValueBean.slowMethod("key1", "value1");
-        // Convert cache to Map
+        keyValueBean.shortResult("key1", "value1");
+        try (Cache<StringGeneratedCacheKey, String> testCache
+                = cacheBean.getCacheManager().getCache("shortCache")) {
+            // Convert cache to Map
+            final Map<String, String> map = new HashMap<>();
+            Iterator<Cache.Entry<StringGeneratedCacheKey, String>> allCacheEntries
+                    = testCache.iterator();
+            while (allCacheEntries.hasNext()) {
+                Cache.Entry<StringGeneratedCacheKey, String> currentEntry
+                        = allCacheEntries.next();
+                map.put(currentEntry.getKey().toString(), currentEntry.
+                        getValue());
+            }
+            assertNotNull(map);
+            // We added 3 unique keys to cache
+            assertEquals(3, map.size());
+            log.info(String.format("Map of cache: %s", map));
+            // Let's try looking up by key
+            final String value = testCache.get(new StringGeneratedCacheKey(
+                    "key1"));
+            assertNotNull(value);
+            assertEquals(value, "value1");
+        }
+    }
+
+    /**
+     * Test JSR-107 @CacheResult.
+     */
+    @Test
+    public final void cacheResultMed() {
+        log.info("cacheResultMed");
+        assertNotNull(keyValueBean);
+        log.info(String.format("Cache names: %s", cacheBean.getCacheManager().
+                getCacheNames()));
+        // Let's clear the cache
+        keyValueBean.invalidateCache();
+        // Add some stuff
+        keyValueBean.medResult("key4", "value4");
+        keyValueBean.medResult("key5", "value5");
+        keyValueBean.medResult("key6", "value6");
+        // See if existing key added to cache (check log)
+        keyValueBean.medResult("key4", "value4");
+        try (Cache<StringGeneratedCacheKey, String> testCache
+                = cacheBean.getCacheManager().getCache("medCache")) {
+            // Convert cache to Map
+            final Map<String, String> map = new HashMap<>();
+            Iterator<Cache.Entry<StringGeneratedCacheKey, String>> allCacheEntries
+                    = testCache.iterator();
+            while (allCacheEntries.hasNext()) {
+                Cache.Entry<StringGeneratedCacheKey, String> currentEntry
+                        = allCacheEntries.next();
+                map.put(currentEntry.getKey().toString(), currentEntry.
+                        getValue());
+            }
+            assertNotNull(map);
+            // We added 3 unique keys to cache
+            assertEquals(3, map.size());
+            log.info(String.format("Map of cache: %s", map));
+            // Let's try looking up by key
+            final String value = testCache.get(new StringGeneratedCacheKey(
+                    "key4"));
+            assertNotNull(value);
+            assertEquals(value, "value4");
+        }
+    }
+
+    /**
+     * Test JSR-107 @CacheResult.
+     */
+    @Test
+    public final void cacheResultLong() {
+        log.info("cacheResultLong");
+        assertNotNull(keyValueBean);
+        log.info(String.format("Cache names: %s", cacheBean.getCacheManager().
+                getCacheNames()));
+        // Let's clear the cache
+        keyValueBean.invalidateCache();
+        // Add some stuff
+        keyValueBean.medResult("key7", "value7");
+        keyValueBean.medResult("key8", "value8");
+        keyValueBean.medResult("key9", "value9");
+        // See if existing key added to cache (check log)
+        keyValueBean.medResult("key9", "value9");
+        try (Cache<StringGeneratedCacheKey, String> testCache
+                = cacheBean.getCacheManager().getCache("medCache")) {
+            // Convert cache to Map
+            final Map<String, String> map = new HashMap<>();
+            Iterator<Cache.Entry<StringGeneratedCacheKey, String>> allCacheEntries
+                    = testCache.iterator();
+            while (allCacheEntries.hasNext()) {
+                Cache.Entry<StringGeneratedCacheKey, String> currentEntry
+                        = allCacheEntries.next();
+                map.put(currentEntry.getKey().toString(), currentEntry.
+                        getValue());
+            }
+            assertNotNull(map);
+            // We added 3 unique keys to cache
+            assertEquals(3, map.size());
+            log.info(String.format("Map of cache: %s", map));
+            // Let's try looking up by key
+            final String value = testCache.get(new StringGeneratedCacheKey(
+                    "key7"));
+            assertNotNull(value);
+            assertEquals(value, "value7");
+        }
     }
 
     /**
@@ -105,7 +220,12 @@ public class CacheBeanTest {
         assertNotNull(keyValueBean);
         // Let's clear the cache
         keyValueBean.invalidateCache();
-        keyValueBean.add("key4", "value4");
+        try (Cache<StringGeneratedCacheKey, String> testCache
+                = cacheBean.getCacheManager().getCache("shortCache")) {
+            // Let's test @CachePut
+            keyValueBean.add("key4", "value4");
+            assertNotNull(testCache.get(new StringGeneratedCacheKey("key4")));
+        }
     }
 
     /**
@@ -117,10 +237,15 @@ public class CacheBeanTest {
         assertNotNull(keyValueBean);
         // Let's clear the cache
         keyValueBean.invalidateCache();
-        // Let's test @CachePut
-        keyValueBean.add("key5", "value5");
-        // Let's test @CacheRemove
-        keyValueBean.remove("key5");
+        try (Cache<StringGeneratedCacheKey, String> testCache
+                = cacheBean.getCacheManager().getCache("shortCache")) {
+            // Let's test @CachePut
+            keyValueBean.add("key5", "value5");
+            assertNotNull(testCache.get(new StringGeneratedCacheKey("key5")));
+            // Let's test @CacheRemove
+            keyValueBean.remove("key5");
+            assertNull(testCache.get(new StringGeneratedCacheKey("key5")));
+        }
     }
 
     /**
@@ -132,9 +257,14 @@ public class CacheBeanTest {
         assertNotNull(keyValueBean);
         // Let's clear the cache
         keyValueBean.invalidateCache();
-        // Let's test @CachePut
-        keyValueBean.add("key6", "value6");
-        // Let's clear the cache
-        keyValueBean.invalidateCache();
+        try (Cache<StringGeneratedCacheKey, String> testCache
+                = cacheBean.getCacheManager().getCache("shortCache")) {
+            // Let's test @CachePut
+            keyValueBean.add("key6", "value6");
+            assertNotNull(testCache.get(new StringGeneratedCacheKey("key6")));
+            // Let's clear the cache
+            keyValueBean.invalidateCache();
+            assertFalse(testCache.iterator().hasNext());
+        }
     }
 }

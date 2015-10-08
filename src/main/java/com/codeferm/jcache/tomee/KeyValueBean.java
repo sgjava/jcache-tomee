@@ -27,7 +27,7 @@ import javax.ejb.Singleton;
  */
 @Singleton
 @Lock(LockType.READ)
-@CacheDefaults(cacheName = "testCache", cacheKeyGenerator
+@CacheDefaults(cacheName = "shortCache", cacheKeyGenerator
         = StringKeyGenerator.class)
 public class KeyValueBean {
 
@@ -50,7 +50,41 @@ public class KeyValueBean {
     //CHECKSTYLE:OFF DesignForExtension - CDI beans cannot have final methods
     @CacheResult
     //CHECKSTYLE:ON DesignForExtension
-    public String slowMethod(@CacheKey final String key, final String value) {
+    public String shortResult(@CacheKey final String key, final String value) {
+        log.info(String.format("Adding key: %s, value: %s", key, value));
+        // Do something slow
+        return value;
+    }
+
+    /**
+     * A slow method that needs caching. Value is cached. If the key exists it
+     * is retrieved from cache.
+     *
+     * @param key Cache key.
+     * @param value Cache value.
+     * @return Value.
+     */
+    //CHECKSTYLE:OFF DesignForExtension - CDI beans cannot have final methods
+    @CacheResult(cacheName = "medCache")
+    //CHECKSTYLE:ON DesignForExtension
+    public String medResult(@CacheKey final String key, final String value) {
+        log.info(String.format("Adding key: %s, value: %s", key, value));
+        // Do something slow
+        return value;
+    }
+
+    /**
+     * A slow method that needs caching. Value is cached. If the key exists it
+     * is retrieved from cache.
+     *
+     * @param key Cache key.
+     * @param value Cache value.
+     * @return Value.
+     */
+    //CHECKSTYLE:OFF DesignForExtension - CDI beans cannot have final methods
+    @CacheResult(cacheName = "longCache")
+    //CHECKSTYLE:ON DesignForExtension
+    public String longResult(@CacheKey final String key, final String value) {
         log.info(String.format("Adding key: %s, value: %s", key, value));
         // Do something slow
         return value;

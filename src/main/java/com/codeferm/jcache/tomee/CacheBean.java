@@ -6,7 +6,6 @@
  */
 package com.codeferm.jcache.tomee;
 
-import java.io.File;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -76,12 +75,16 @@ public class CacheBean {
     public void init() {
         log.info("PostConstruct");
         cachingProvider = Caching.getCachingProvider();
-        //cacheManager = cachingProvider.getCacheManager();
         log.info("getCacheManager");
-        cacheManager = cachingProvider.getCacheManager(new File(
-                "src/config/ehcache.xml").toURI(), null, null);
+        cacheManager = cachingProvider.getCacheManager();
+        // Using the non-default cache manager causes getCache not to retrieve
+        // cache configured in file
+        /*
+         cacheManager = cachingProvider.getCacheManager(new File(
+         "src/config/ehcache.xml").toURI(), null, null);
+         */
         log.info("getCache");
-        cache = cacheManager.getCache("testCache");
+        cache = cacheManager.getCache("shortCache");
     }
 
     /**

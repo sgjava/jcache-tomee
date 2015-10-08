@@ -62,7 +62,7 @@ public class UserService {
     @PostConstruct
     public final void init() {
         log.info("PostConstruct");
-        testCache = cacheBean.getCacheManager().getCache("testCache");
+        testCache = cacheBean.getCacheManager().getCache("shortCache");
     }
 
     /**
@@ -102,7 +102,7 @@ public class UserService {
     @POST
     public final Response userInfo(final UserDto userDto) {
         log.info(String.format("userDto: %s", userDto.toString()));
-        keyValueBean.slowMethod(userDto.getUserName(), userDto.getFullName());
+        keyValueBean.shortResult(userDto.getUserName(), userDto.getFullName());
         // Return VersionDto
         return Response.ok(userDto).build();
     }
