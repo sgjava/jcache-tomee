@@ -182,13 +182,13 @@ public class CacheBeanTest {
         // Let's clear the cache
         keyValueBean.invalidateCache();
         // Add some stuff
-        keyValueBean.medResult("key7", "value7");
-        keyValueBean.medResult("key8", "value8");
-        keyValueBean.medResult("key9", "value9");
+        keyValueBean.longResult("key7", "value7");
+        keyValueBean.longResult("key8", "value8");
+        keyValueBean.longResult("key9", "value9");
         // See if existing key added to cache (check log)
-        keyValueBean.medResult("key9", "value9");
+        keyValueBean.longResult("key9", "value9");
         try (Cache<StringGeneratedCacheKey, String> testCache
-                = cacheBean.getCacheManager().getCache("medCache")) {
+                = cacheBean.getCacheManager().getCache("longCache")) {
             // Convert cache to Map
             final Map<String, String> map = new HashMap<>();
             Iterator<Cache.Entry<StringGeneratedCacheKey, String>> allCacheEntries
