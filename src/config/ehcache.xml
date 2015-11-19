@@ -2,57 +2,39 @@
 <!--
  Copyright (c) Codeferm. All rights reserved.
 
- Dev configuration file for Ehcache. This does not include RMI replication.
+ Dev configuration file for Ehcache JSR-107.
 
- Created by Steven P. Goldsmith on August 19, 2015
+ Created by Steven P. Goldsmith on November 3, 2015
  sgoldsmith@codeferm.com
 -->
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="ehcache.xsd"
-         updateCheck="true" monitoring="autodetect"
-         dynamicConfig="true">
 
-    <defaultCache
-        maxEntriesLocalHeap="1000000"
-        eternal="false"
-        timeToIdleSeconds="600"
-        timeToLiveSeconds="600"
-        memoryStoreEvictionPolicy="LRU">
-    </defaultCache>
-
-    <cacheManagerPeerProviderFactory
-        class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
-        properties="peerDiscovery=manual, rmiUrls=//${ehcache.providerHost}:${ehcache.providerPort}/testCache"
-        propertySeparator="," />
-
-    <cacheManagerPeerListenerFactory
-        class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
-        properties="hostName=${ehcache.listenerHost}, port=${ehcache.listenerPort}, socketTimeoutMillis=120000"
-        propertySeparator=","/>    
-
-    <cache name="testCache"
-           maxBytesLocalHeap="500M"
-           eternal="false"
-           timeToIdleSeconds="${ehcache.timeToIdleSeconds}"
-           timeToLiveSeconds="${ehcache.timeToLiveSeconds}"
-           memoryStoreEvictionPolicy="LFU"
-           transactionalMode="off">
-
-        <!-- RMI replication listener -->
-        <cacheEventListenerFactory
-            class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
-            properties="replicateAsynchronously=true,
-                 replicatePuts=true,
-                 replicatePutsViaCopy=true,
-                 replicateUpdates=true,
-                 replicateUpdatesViaCopy=true,
-                 replicateRemovals=true" />
-
-        <!-- RMI Cache bootstrap -->
-        <bootstrapCacheLoaderFactory
-            class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
-            properties="bootstrapAsynchronously=true, maximumChunkSizeBytes=5000000"
-            propertySeparator="," />                
+<config
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://www.ehcache.org/v3'
+    xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
+    xsi:schemaLocation="http://www.ehcache.org/v3 ../../../../../../../xml/src/main/resources/ehcache-core.xsd
+                        http://www.ehcache.org/v3/jsr107 ../../../../../main/resources/ehcache-107ext.xsd">
+   
+    <cache alias="shortCache">
+        <expiry>
+            <ttl unit="minutes">10</ttl>
+        </expiry>    
+        <heap size="10000" unit="entries"/>
     </cache>
 
-</ehcache>
+    <cache alias="medCache">
+        <expiry>
+            <ttl unit="minutes">60</ttl>
+        </expiry>    
+        <heap size="10000" unit="entries"/>
+    </cache>
+
+    <cache alias="longCache">
+        <expiry>
+            <ttl unit="hours">24</ttl>
+        </expiry>    
+        <heap size="10000" unit="entries"/>
+    </cache>
+
+</config>
+

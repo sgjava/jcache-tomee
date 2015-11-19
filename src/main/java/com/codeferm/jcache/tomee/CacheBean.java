@@ -6,6 +6,7 @@
  */
 package com.codeferm.jcache.tomee;
 
+import java.io.File;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -17,6 +18,7 @@ import javax.ejb.Lock;
 import static javax.ejb.LockType.READ;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.inject.Produces;
 
 /**
  * Singleton bean to manage cache.
@@ -56,6 +58,7 @@ public class CacheBean {
      * @return Cache manager.
      */
     //CHECKSTYLE:OFF DesignForExtension - CDI beans cannot have final methods
+    @Produces
     public CacheManager getCacheManager() {
         //CHECKSTYLE:ON DesignForExtension
         return cacheManager;
@@ -75,15 +78,9 @@ public class CacheBean {
     public void init() {
         log.info("PostConstruct");
         cachingProvider = Caching.getCachingProvider();
-        log.info("getCacheManager");
-        cacheManager = cachingProvider.getCacheManager();
-        // Using the non-default cache manager causes getCache not to retrieve
-        // cache configured in file
-        /*
-         cacheManager = cachingProvider.getCacheManager(new File(
-         "src/config/ehcache.xml").toURI(), null, null);
-         */
-        log.info("getCache");
+        cacheManager = cachingProvider.getCacheManager(new File(
+                "src/config/ehcache.xml").toURI(), CacheBean.class.
+                getClassLoader());
         cache = cacheManager.getCache("shortCache");
     }
 

@@ -27,8 +27,8 @@ import javax.ejb.Singleton;
  */
 @Singleton
 @Lock(LockType.READ)
-@CacheDefaults(cacheName = "shortCache", cacheKeyGenerator
-        = StringKeyGenerator.class)
+@CacheDefaults(cacheResolverFactory = JCacheResolverFactory.class,
+        cacheKeyGenerator = StringKeyGenerator.class, cacheName = "shortCache")
 public class KeyValueBean {
 
     /**
