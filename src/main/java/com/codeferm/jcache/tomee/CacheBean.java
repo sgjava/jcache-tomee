@@ -70,14 +70,10 @@ public class CacheBean {
     public void init() {
         log.info("PostConstruct");
         cachingProvider = Caching.getCachingProvider();
+        // Change to src/config/ehcache.xml for Ehcache provider
         cacheManager = cachingProvider.getCacheManager(new File(
-                "src/config/ehcache.xml").toURI(), CacheBean.class.
+                "src/config/jcache.ccf").toURI(), CacheBean.class.
                 getClassLoader());
-        /*
-         cacheManager = cachingProvider.getCacheManager(new File(
-         "src/config/jcache.ccf").toURI(), CacheBean.class.
-         getClassLoader());
-         */
         cacheManager.createCache("shortCache", new MutableConfiguration().
                 setStoreByValue(false).setStatisticsEnabled(true).
                 setManagementEnabled(true));
