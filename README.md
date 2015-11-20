@@ -22,3 +22,4 @@
 * GeneratedCacheKey using String
 * CacheResolverFactory in order to expose CacheManager used by JCache annotations
 * Uses javax.cache.* only! No net.sf.ehcache.* imports used
+* Change JCache provider in pom.xml

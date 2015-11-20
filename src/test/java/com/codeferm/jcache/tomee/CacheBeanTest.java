@@ -52,7 +52,7 @@ public class CacheBeanTest {
     private static EJBContainer container;
 
     /**
-     * Set up.
+     * Set up. ${ehcache.listenerPort}
      *
      * @throws NamingException possible exception.
      */

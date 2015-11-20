@@ -10,9 +10,9 @@ import java.io.File;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
+import javax.cache.configuration.MutableConfiguration;
 import javax.cache.spi.CachingProvider;
 import javax.ejb.Lock;
 import static javax.ejb.LockType.READ;
@@ -47,10 +47,6 @@ public class CacheBean {
      * Cache manager.
      */
     private CacheManager cacheManager;
-    /**
-     * Cache.
-     */
-    private Cache<StringGeneratedCacheKey, String> cache;
 
     /**
      * Get cache manager.
@@ -62,10 +58,6 @@ public class CacheBean {
     public CacheManager getCacheManager() {
         //CHECKSTYLE:ON DesignForExtension
         return cacheManager;
-    }
-
-    public Cache<StringGeneratedCacheKey, String> getCache() {
-        return cache;
     }
 
     /**
@@ -81,7 +73,20 @@ public class CacheBean {
         cacheManager = cachingProvider.getCacheManager(new File(
                 "src/config/ehcache.xml").toURI(), CacheBean.class.
                 getClassLoader());
-        cache = cacheManager.getCache("shortCache");
+        /*
+         cacheManager = cachingProvider.getCacheManager(new File(
+         "src/config/jcache.ccf").toURI(), CacheBean.class.
+         getClassLoader());
+         */
+        cacheManager.createCache("shortCache", new MutableConfiguration().
+                setStoreByValue(false).setStatisticsEnabled(true).
+                setManagementEnabled(true));
+        cacheManager.createCache("medCache", new MutableConfiguration().
+                setStoreByValue(false).setStatisticsEnabled(true).
+                setManagementEnabled(true));
+        cacheManager.createCache("longCache", new MutableConfiguration().
+                setStoreByValue(false).setStatisticsEnabled(true).
+                setManagementEnabled(true));
     }
 
     /**

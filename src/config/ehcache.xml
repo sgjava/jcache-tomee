@@ -11,30 +11,38 @@
 <config
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xmlns='http://www.ehcache.org/v3'
-    xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
-    xsi:schemaLocation="http://www.ehcache.org/v3 ../../../../../../../xml/src/main/resources/ehcache-core.xsd
-                        http://www.ehcache.org/v3/jsr107 ../../../../../main/resources/ehcache-107ext.xsd">
-   
-    <cache alias="shortCache">
+    xmlns:jsr107='http://www.ehcache.org/v3/jsr107'> 
+
+    <service> 
+        <jsr107:defaults default-template="tinyCache"> 
+            <jsr107:cache name="shortCache" template="shortCacheTemplate"/> 
+            <jsr107:cache name="medCache" template="medCacheTemplate"/>
+            <jsr107:cache name="longCache" template="longCacheTemplate"/>
+        </jsr107:defaults>
+    </service>
+
+    <cache-template name="tinyCache">
+        <heap size="20" unit="entries"/>
+    </cache-template>
+
+    <cache-template name="shortCacheTemplate">
         <expiry>
             <ttl unit="minutes">10</ttl>
-        </expiry>    
-        <heap size="10000" unit="entries"/>
-    </cache>
-
-    <cache alias="medCache">
+        </expiry>
+        <heap size="2000" unit="entries"/>
+    </cache-template>
+    
+    <cache-template name="medCacheTemplate">
         <expiry>
             <ttl unit="minutes">60</ttl>
-        </expiry>    
-        <heap size="10000" unit="entries"/>
-    </cache>
+        </expiry>
+        <heap size="2000" unit="entries"/>
+    </cache-template>
 
-    <cache alias="longCache">
+        <cache-template name="longCacheTemplate">
         <expiry>
             <ttl unit="hours">24</ttl>
-        </expiry>    
-        <heap size="10000" unit="entries"/>
-    </cache>
-
+        </expiry>
+        <heap size="2000" unit="entries"/>
+    </cache-template>
 </config>
-

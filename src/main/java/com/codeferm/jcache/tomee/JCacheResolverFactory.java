@@ -42,9 +42,6 @@ public class JCacheResolverFactory implements CacheResolverFactory {
     public JCacheResolverFactory() {
     }
 
-    /* (non-Javadoc)
-     * @see javax.cache.annotation.CacheResolverFactory#getCacheResolver(javax.cache.annotation.CacheMethodDetails)
-     */
     /**
      * Return cache resolver.
      *
