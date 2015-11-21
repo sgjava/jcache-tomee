@@ -70,7 +70,8 @@ public class CacheBean {
     public void init() {
         log.info("PostConstruct");
         cachingProvider = Caching.getCachingProvider();
-        // Change to src/config/ehcache.xml for Ehcache provider
+        // Change to src/config/ehcache.xml for Ehcache provider and edit POM
+        // to comment out JCS and add Ehcache
         cacheManager = cachingProvider.getCacheManager(new File(
                 "src/config/jcache.ccf").toURI(), CacheBean.class.
                 getClassLoader());

@@ -55,7 +55,7 @@ public class JCacheResolverFactory implements CacheResolverFactory {
             final CacheMethodDetails<? extends Annotation> cacheMethodDetails) {
         final String cacheName = cacheMethodDetails.getCacheName();
         Cache<?, ?> cache = this.cacheManager.getCache(cacheName);
-
+        // Create Object cache if not found
         if (cache == null) {
             log.warning(String.format(
                     "No Cache named '%s' was found in the CacheManager, a default cache will be created",
@@ -64,7 +64,6 @@ public class JCacheResolverFactory implements CacheResolverFactory {
                     new MutableConfiguration<Object, Object>());
             cache = cacheManager.getCache(cacheName);
         }
-
         return new DefaultCacheResolver(cache);
     }
 
@@ -87,6 +86,7 @@ public class JCacheResolverFactory implements CacheResolverFactory {
                     "Can only be called when CacheResult.exceptionCacheName() is specified");
         }
         Cache<?, ?> cache = cacheManager.getCache(exceptionCacheName);
+        // Create Object cache if not found
         if (cache == null) {
             log.warning(String.format(
                     "No Cache named '%s' was found in the CacheManager, a default cache will be created",
