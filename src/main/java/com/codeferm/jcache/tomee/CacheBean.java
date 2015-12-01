@@ -44,6 +44,24 @@ public class CacheBean {
             getLogger(CacheBean.class.getName());
     //CHECKSTYLE:ON ConstantName
     /**
+     * System properties file.
+     */
+    private static final String SYSTEM_PROPS_FILE
+            = "src/config/system.properties";
+    /**
+     * JCache cache manager properties.
+     */
+    private static final String JCACHE_PROPS_FILE
+            = "src/config/jcache.properties";
+    /**
+     * JCache configuration file. Use the following: src/config/jcs.ccf for
+     * Apache JCS, src/config/ehcache.xml for Ehcache,
+     * src/config/hazelcast-client.xml for Hazelcast. Be sure to edit POM
+     * dependency for JCache provider.
+     */
+    private static final String JCACHE_CONFIG_FILE
+            = "src/config/hazelcast-client.xml";
+    /**
      * Caching provider.
      */
     private CachingProvider cachingProvider;
@@ -90,7 +108,7 @@ public class CacheBean {
     public void init() {
         log.info("PostConstruct");
         final Properties sysProperties
-                = loadProperties("src/config/system.properties");
+                = loadProperties(SYSTEM_PROPS_FILE);
         // See if we have system properties
         if (!sysProperties.isEmpty()) {
             // Set all system properties
@@ -101,14 +119,12 @@ public class CacheBean {
             }
         }
         // CachingProvider.getCacheManager properties
-        final Properties jcacheProperties
-                = loadProperties("src/config/jcache.properties");
+        final Properties jcacheProperties = loadProperties(JCACHE_PROPS_FILE);
         cachingProvider = Caching.getCachingProvider();
-        // Change to src/config/ehcache.xml for Ehcache provider and edit POM
-        // to comment out JCS and add Ehcache dependency, etc.
+        // Get cache manager
         cacheManager = cachingProvider.getCacheManager(new File(
-                "src/config/hazelcast-client.xml").toURI(), CacheBean.class.
-                getClassLoader(), jcacheProperties);
+                JCACHE_CONFIG_FILE).toURI(), CacheBean.class.getClassLoader(),
+                jcacheProperties);
         cacheManager.createCache("shortCache", new MutableConfiguration().
                 setStoreByValue(false).setStatisticsEnabled(true).
                 setManagementEnabled(true));
