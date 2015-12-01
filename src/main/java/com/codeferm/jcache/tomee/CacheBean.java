@@ -25,7 +25,7 @@ import javax.ejb.Startup;
 import javax.enterprise.inject.Produces;
 
 /**
- * Singleton bean to manage cache.
+ * Singleton bean to manage caches.
  *
  * @author sgoldsmith
  * @version 1.0.0
@@ -44,23 +44,9 @@ public class CacheBean {
             getLogger(CacheBean.class.getName());
     //CHECKSTYLE:ON ConstantName
     /**
-     * System properties file.
+     * Application properties.
      */
-    private static final String SYSTEM_PROPS_FILE
-            = "src/config/system.properties";
-    /**
-     * JCache cache manager properties.
-     */
-    private static final String JCACHE_PROPS_FILE
-            = "src/config/jcache.properties";
-    /**
-     * JCache configuration file. Use the following: src/config/jcs.ccf for
-     * Apache JCS, src/config/ehcache.xml for Ehcache,
-     * src/config/hazelcast-client.xml for Hazelcast. Be sure to edit POM
-     * dependency for JCache provider.
-     */
-    private static final String JCACHE_CONFIG_FILE
-            = "src/config/hazelcast-client.xml";
+    private static final String APP_PROPS_FILE = "src/config/app.properties";
     /**
      * Caching provider.
      */
@@ -99,16 +85,17 @@ public class CacheBean {
     }
 
     /**
-     * Using EHCache provider configured via ehcache.xml in classpath. Set
-     * system properties for ehcache.xml substitution.
+     * Configure cache manager and create caches.
      */
     //CHECKSTYLE:OFF DesignForExtension - CDI beans cannot have final methods
     @PostConstruct
     //CHECKSTYLE:ON DesignForExtension
     public void init() {
         log.info("PostConstruct");
-        final Properties sysProperties
-                = loadProperties(SYSTEM_PROPS_FILE);
+        // App properties
+        final Properties appProperties = loadProperties(APP_PROPS_FILE);
+        final Properties sysProperties = loadProperties(appProperties.
+                getProperty("app.system.props.file"));
         // See if we have system properties
         if (!sysProperties.isEmpty()) {
             // Set all system properties
@@ -119,12 +106,22 @@ public class CacheBean {
             }
         }
         // CachingProvider.getCacheManager properties
-        final Properties jcacheProperties = loadProperties(JCACHE_PROPS_FILE);
+        final Properties jcacheProperties = loadProperties(appProperties.
+                getProperty("app.jcache.props.file"));
+        log.info("Getting caching provider");
         cachingProvider = Caching.getCachingProvider();
         // Get cache manager
-        cacheManager = cachingProvider.getCacheManager(new File(
-                JCACHE_CONFIG_FILE).toURI(), CacheBean.class.getClassLoader(),
-                jcacheProperties);
+        log.info("Getting cache manager");
+        // Should we use default getCacheManager?
+        if (appProperties.getProperty("app.use.default.getcachemanager").equals(
+                "true")) {
+            cacheManager = cachingProvider.getCacheManager();
+        } else {
+            cacheManager = cachingProvider.getCacheManager(new File(
+                    appProperties.getProperty("app.jcache.config.file")).toURI(),
+                    null, jcacheProperties);
+        }
+        log.info("Creating caches");
         cacheManager.createCache("shortCache", new MutableConfiguration().
                 setStoreByValue(false).setStatisticsEnabled(true).
                 setManagementEnabled(true));

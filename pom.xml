@@ -114,7 +114,7 @@ sgoldsmith@codeferm.com
             <version>1.9.13</version>
             <scope>test</scope>
         </dependency>
-        <!--
+        <!-- Uncomment for Apache JCS
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-jcs-jcache</artifactId>

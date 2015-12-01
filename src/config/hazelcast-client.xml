@@ -11,7 +11,6 @@
 <hazelcast-client xsi:schemaLocation="http://www.hazelcast.com/schema/client-config hazelcast-client-config-3.6.xsd"
                   xmlns="http://www.hazelcast.com/schema/client-config"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
     <group>
         <name>cluster1</name>
         <password>cluster1pass</password>
@@ -19,8 +18,7 @@
 
     <network>
         <cluster-members>
-            <address>127.0.0.1:5701</address>
+            <address>127.0.0.1:8000</address>
         </cluster-members>
     </network>
-
 </hazelcast-client>
