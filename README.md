@@ -21,5 +21,5 @@
 * Uses Hazelcast, Ehcache or Apache JCS provider
 * GeneratedCacheKey using String
 * CacheResolverFactory in order to expose CacheManager used by JCache annotations
-* Uses javax.cache.* only! No net.sf.ehcache.* imports used
+* Uses javax.cache.* only! No provider specific imports used
 * Change JCache provider in pom.xml, configuration file in CacheBean and property files
