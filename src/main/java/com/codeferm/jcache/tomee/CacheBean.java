@@ -7,6 +7,10 @@
 package com.codeferm.jcache.tomee;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -61,6 +65,22 @@ public class CacheBean {
     }
 
     /**
+     * Load Properties from file.
+     *
+     * @param fileName
+     * @return
+     */
+    public Properties loadProperties(final String fileName) {
+        Properties properties = new Properties();
+        try (InputStream is = new FileInputStream(fileName)) {
+            properties.load(is);
+        } catch (IOException e) {
+            log.severe(e.getMessage());
+        }
+        return properties;
+    }
+
+    /**
      * Using EHCache provider configured via ehcache.xml in classpath. Set
      * system properties for ehcache.xml substitution.
      */
@@ -69,12 +89,26 @@ public class CacheBean {
     //CHECKSTYLE:ON DesignForExtension
     public void init() {
         log.info("PostConstruct");
+        final Properties sysProperties
+                = loadProperties("src/config/system.properties");
+        // See if we have system properties
+        if (!sysProperties.isEmpty()) {
+            // Set all system properties
+            for (String key : sysProperties.stringPropertyNames()) {
+                System.setProperty(key, sysProperties.getProperty(key));
+                log.info(String.format("Setting system property %s=%s", key,
+                        sysProperties.getProperty(key)));
+            }
+        }
+        // CachingProvider.getCacheManager properties
+        final Properties jcacheProperties
+                = loadProperties("src/config/jcache.properties");
         cachingProvider = Caching.getCachingProvider();
         // Change to src/config/ehcache.xml for Ehcache provider and edit POM
-        // to comment out JCS and add Ehcache dependency
+        // to comment out JCS and add Ehcache dependency, etc.
         cacheManager = cachingProvider.getCacheManager(new File(
-                "src/config/jcache.ccf").toURI(), CacheBean.class.
-                getClassLoader());
+                "src/config/hazelcast-client.xml").toURI(), CacheBean.class.
+                getClassLoader(), jcacheProperties);
         cacheManager.createCache("shortCache", new MutableConfiguration().
                 setStoreByValue(false).setStatisticsEnabled(true).
                 setManagementEnabled(true));
