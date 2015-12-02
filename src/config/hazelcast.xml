@@ -17,7 +17,7 @@
     </group>
     <management-center enabled="false">http://localhost:8080/mancenter</management-center>
     <network>
-        <port auto-increment="true" port-count="100">5701</port>
+        <port auto-increment="false" port-count="100">5701</port>
         <outbound-ports>
             <!--
             Allowed port range when connecting to other nodes.
@@ -26,11 +26,11 @@
             <ports>0</ports>
         </outbound-ports>
         <join>
-            <multicast enabled="true">
+            <multicast enabled="false">
                 <multicast-group>224.2.2.3</multicast-group>
                 <multicast-port>54327</multicast-port>
             </multicast>
-            <tcp-ip enabled="false">
+            <tcp-ip enabled="true">
                 <interface>127.0.0.1</interface>
                 <member-list>
                     <member>127.0.0.1</member>
@@ -52,7 +52,7 @@
             </discovery-strategies>
         </join>
         <interfaces enabled="false">
-            <interface>10.10.1.*</interface>
+            <interface>127.0.0.1</interface>
         </interfaces>
         <ssl enabled="false"/>
         <socket-interceptor enabled="false"/>
