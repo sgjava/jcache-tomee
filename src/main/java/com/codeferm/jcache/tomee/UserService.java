@@ -103,7 +103,7 @@ public class UserService {
     public final Response userInfo(final UserDto userDto) {
         log.info(String.format("userDto: %s", userDto.toString()));
         keyValueBean.shortResult(userDto.getUserName(), userDto.getFullName());
-        // Return VersionDto
+        // Return UserDto
         return Response.ok(userDto).build();
     }
 }
