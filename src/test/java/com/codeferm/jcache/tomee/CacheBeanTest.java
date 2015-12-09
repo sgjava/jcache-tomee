@@ -52,24 +52,27 @@ public class CacheBeanTest {
     private static EJBContainer container;
 
     /**
-     * Set up. ${ehcache.listenerPort}
+     * I had problems with Hazelcast JCache provider using @BeforeClass to start
+     * container and @Before to do injection. This provides a clean container
+     * for each test.
      *
      * @throws NamingException possible exception.
      */
     @Before
-    public final void setUp() throws NamingException {
-        log.info("setUp()");
+    public final void start() throws NamingException {
+        log.info("start()");
         container = EJBContainer.createEJBContainer();
         container.getContext().bind("inject", this);
     }
 
     /**
-     * Tear down.
+     * Stop container for each test.
      *
      * @throws NamingException Possible exception.
      */
     @After
-    public final void tearDown() throws NamingException {
+    public final void stop() throws NamingException {
+        log.info("stop()");
         container.getContext().unbind("inject");
         container.close();
     }

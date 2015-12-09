@@ -50,21 +50,26 @@ public class UserServiceJCacheTest {
      * Start EJB container.
      */
     @BeforeClass
-    public static void setUpClass() {
-        try {
-            log.info("setUpClass()");
-            // tomee-embedded configuration
-            configuration = new Configuration().randomHttpPort();
-            container = new Container();
-            container.setup(configuration);
-            container.start();
-            container.deployClasspathAsWebApp("/jcache-tomee", new File(
-                    "src/main/webapp"));
-            log.info(String.format("TomEE embedded started on %s:%s",
-                    configuration.getHost(), configuration.getHttpPort()));
-        } catch (Exception e) {
-            log.severe(e.getMessage());
-        }
+    public static void start() throws Exception {
+        log.info("start()");
+        // tomee-embedded configuration
+        configuration = new Configuration().randomHttpPort();
+        container = new Container();
+        container.setup(configuration);
+        container.start();
+        container.deployClasspathAsWebApp("/jcache-tomee", new File(
+                "src/main/webapp"));
+        log.info(String.format("TomEE embedded started on %s:%s",
+                configuration.getHost(), configuration.getHttpPort()));
+    }
+
+    /**
+     * Stop EJB container.
+     */
+    @AfterClass
+    public static void stop() throws Exception {
+        log.info("stop()");
+        container.stop();
     }
 
     /**
@@ -94,6 +99,16 @@ public class UserServiceJCacheTest {
                 userDto, MediaType.APPLICATION_JSON), UserDto.class);
         assertNotNull(response);
         log.info(String.format("Response: %s", response));
+        // A few more times for good measure
+        response = client.target(postUrl).request().post(Entity.entity(
+                userDto, MediaType.APPLICATION_JSON), UserDto.class);
+        assertNotNull(response);
+        response = client.target(postUrl).request().post(Entity.entity(
+                userDto, MediaType.APPLICATION_JSON), UserDto.class);
+        assertNotNull(response);
+        response = client.target(postUrl).request().post(Entity.entity(
+                userDto, MediaType.APPLICATION_JSON), UserDto.class);
+        assertNotNull(response);
         // Let's see what's in cache
         final String getUrl = String.format(
                 "http://%s:%s/jcache-tomee/user/v1/getmap/",
@@ -102,18 +117,5 @@ public class UserServiceJCacheTest {
                 Map.class);
         assertNotNull(map);
         log.info(String.format("Map of cache: %s", map));
-    }
-
-    /**
-     * Close EJB container.
-     */
-    @AfterClass
-    public static void tearDownClass() {
-        try {
-            log.info("tearDownClass()");
-            container.stop();
-        } catch (Exception e) {
-            log.severe(e.getMessage());
-        }
     }
 }
