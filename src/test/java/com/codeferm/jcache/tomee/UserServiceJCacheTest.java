@@ -6,6 +6,7 @@
  */
 package com.codeferm.jcache.tomee;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import java.io.File;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -15,7 +16,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import org.apache.tomee.embedded.Configuration;
 import org.apache.tomee.embedded.Container;
-import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
@@ -84,7 +84,7 @@ public class UserServiceJCacheTest {
         // Set up web client
         final Client client = ClientBuilder.newClient();
         // JSON provider
-        client.register(JacksonJaxbJsonProvider.class);
+        client.register(JacksonJsonProvider.class);
         // Client logging filter
         client.register(ClientRequestLoggingFilter.class);
         // Get back test user's info
