@@ -11,8 +11,11 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 /**
+ * Abstract DTO with common properties.
  *
  * @author sgoldsmith
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class AbstractDto implements Serializable {
 
