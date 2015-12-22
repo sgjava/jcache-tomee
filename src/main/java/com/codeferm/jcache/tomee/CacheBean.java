@@ -115,6 +115,7 @@ public class CacheBean {
         // Should we use default getCacheManager?
         if (appProperties.getProperty("app.use.default.getcachemanager").equals(
                 "true")) {
+            log.info("Using no args getCacheManager()");
             cacheManager = cachingProvider.getCacheManager();
         } else {
             cacheManager = cachingProvider.getCacheManager(new File(

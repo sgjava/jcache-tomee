@@ -6,7 +6,8 @@
  */
 package com.codeferm.jcache.tomee;
 
-import java.io.Serializable;
+import java.beans.ConstructorProperties;
+import javax.validation.constraints.NotNull;
 
 /**
  * Simple DTO.
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class UserDto implements Serializable {
+public class UserDto extends AbstractDto {
 
     /**
      * Serializable object.
@@ -24,31 +25,38 @@ public class UserDto implements Serializable {
     /**
      * Numeric ID.
      */
+    @NotNull
     private Integer id;
     /**
      * User name,
      */
+    @NotNull
     private String userName;
     /**
      * Full name.
      */
+    @NotNull
     private String fullName;
 
     /**
      * Default constructor.
      */
     public UserDto() {
+        super();
     }
 
     /**
      * Constructor used to set all fields.
      *
+     * @param transId Transaction ID.
      * @param id Numeric ID.
      * @param userName User name,
      * @param fullName Full name.
      */
-    public UserDto(final Integer id, final String userName,
+    @ConstructorProperties({"transId", "transId", "userName", "fullName"})
+    public UserDto(final Long transId, final Integer id, final String userName,
             final String fullName) {
+        super(transId);
         this.id = id;
         this.userName = userName;
         this.fullName = fullName;
@@ -114,8 +122,8 @@ public class UserDto implements Serializable {
      * @return String representation of DTO.
      */
     @Override
-    public final String toString() {
-        return "UserDto{" + "id=" + id + ", userName=" + userName
-                + ", fullName=" + fullName + '}';
+    public String toString() {
+        return super.toString() + ", UserDto{" + "id=" + id + ", userName="
+                + userName + ", fullName=" + fullName + '}';
     }
 }

@@ -48,6 +48,8 @@ public class UserServiceJCacheTest {
 
     /**
      * Start EJB container.
+     *
+     * @throws Exception Possible exception.
      */
     @BeforeClass
     public static void start() throws Exception {
@@ -88,7 +90,7 @@ public class UserServiceJCacheTest {
         // Client logging filter
         client.register(ClientRequestLoggingFilter.class);
         // Get back test user's info
-        final UserDto userDto = new UserDto(1, "test", "Test User");
+        final UserDto userDto = new UserDto(7242350598L, 1, "test", "Test User");
         // First one goes into cache
         UserDto response = client.target(postUrl).request().post(Entity.entity(
                 userDto, MediaType.APPLICATION_JSON), UserDto.class);
@@ -117,5 +119,27 @@ public class UserServiceJCacheTest {
                 Map.class);
         assertNotNull(map);
         log.info(String.format("Map of cache: %s", map));
+    }
+
+    /**
+     * Test service validation.
+     */
+    @Test(expected = javax.ws.rs.BadRequestException.class)
+    public final void testValidation() {
+        log.info("testValidation()");
+        final String postUrl = String.format(
+                "http://%s:%s/jcache-tomee/user/v1/userinfo/",
+                configuration.getHost(), configuration.getHttpPort());
+        // Set up web client
+        final Client client = ClientBuilder.newClient();
+        // JSON provider
+        client.register(JacksonJsonProvider.class);
+        // Client logging filter
+        client.register(ClientRequestLoggingFilter.class);
+        // Set value for cache key to null which should fail validation
+        final UserDto userDto = new UserDto(7242350598L, 1, null, "Test User");
+        // First one goes into cache
+        UserDto response = client.target(postUrl).request().post(Entity.entity(
+                userDto, MediaType.APPLICATION_JSON), UserDto.class);
     }
 }

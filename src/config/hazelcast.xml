@@ -238,18 +238,30 @@
     <hot-restart enabled="false" />
     
     <cache name="shortCache">
+        <key-type class-name="java.lang.String" />
+        <value-type class-name="java.lang.String" />
+        <statistics-enabled>false</statistics-enabled>
+        <management-enabled>false</management-enabled>        
         <expiry-policy-factory>
             <timed-expiry-policy-factory expiry-policy-type="CREATED" duration-amount="10" time-unit="MINUTES"/>
         </expiry-policy-factory>        
     </cache>    
 
     <cache name="medCache">
+        <key-type class-name="java.lang.String" />
+        <value-type class-name="java.lang.String" />
+        <statistics-enabled>false</statistics-enabled>
+        <management-enabled>false</management-enabled>        
         <expiry-policy-factory>
             <timed-expiry-policy-factory expiry-policy-type="CREATED" duration-amount="1" time-unit="HOURS"/>
         </expiry-policy-factory>        
     </cache>    
 
     <cache name="longCache">
+        <key-type class-name="java.lang.String" />
+        <value-type class-name="java.lang.String" />
+        <statistics-enabled>false</statistics-enabled>
+        <management-enabled>false</management-enabled>        
         <expiry-policy-factory>
             <timed-expiry-policy-factory expiry-policy-type="CREATED" duration-amount="1" time-unit="DAYS"/>
         </expiry-policy-factory>        
