@@ -14,8 +14,6 @@ import javax.cache.annotation.CacheRemove;
 import javax.cache.annotation.CacheRemoveAll;
 import javax.cache.annotation.CacheResult;
 import javax.cache.annotation.CacheValue;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.ejb.Singleton;
 
 /**
@@ -26,7 +24,6 @@ import javax.ejb.Singleton;
  * @since 1.0.0
  */
 @Singleton
-@Lock(LockType.READ)
 @CacheDefaults(cacheResolverFactory = JCacheResolverFactory.class,
         cacheKeyGenerator = StringKeyGenerator.class, cacheName = "shortCache")
 public class KeyValueBean {
@@ -34,10 +31,9 @@ public class KeyValueBean {
     /**
      * Logger.
      */
-    //CHECKSTYLE:OFF ConstantName - Logger OK to be static final and lower case
+    @SuppressWarnings("checkstyle:constantname") // Logger OK to be static final and lower case
     private static final Logger log = Logger.getLogger(KeyValueBean.class.
             getName());
-    //CHECKSTYLE:ON ConstantName
 
     /**
      * A slow method that needs caching. Value is cached. If the key exists it

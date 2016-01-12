@@ -40,8 +40,15 @@ public class DefaultCacheResolver implements CacheResolver {
         this.cache = cache;
     }
 
-    /* (non-Javadoc)
-     * @see javax.cache.annotation.CacheResolver#resolveCache(javax.cache.annotation.CacheInvocationContext)
+    /**
+     *
+     * @param <K> Cache key type.
+     * @param <V> Cache value type.
+     * @param cacheInvocationContext The context data for the intercepted method
+     * invocation.
+     * @return Typed cache.
+     * @see
+     * javax.cache.annotation.CacheResolver#resolveCache(javax.cache.annotation.CacheInvocationContext)
      */
     @Override
     @SuppressWarnings("unchecked")

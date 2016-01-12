@@ -49,7 +49,7 @@ public class CacheBeanTest {
     /**
      * EJB container.
      */
-    private static EJBContainer container;
+    private EJBContainer container;
 
     /**
      * I had problems with Hazelcast JCache provider using @BeforeClass to start

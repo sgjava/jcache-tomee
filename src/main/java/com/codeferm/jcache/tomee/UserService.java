@@ -34,15 +34,15 @@ import javax.ws.rs.core.Response;
 @Path("/user/v1")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@SuppressWarnings("checkstyle:designforextension") // Proxy beans allowed to have final methods
 public class UserService {
 
     /**
      * Logger.
      */
-    //CHECKSTYLE:OFF ConstantName - Logger OK to be static final and lower case
+    @SuppressWarnings("checkstyle:constantname") // Logger OK to be static final and lower case
     private static final Logger log = Logger.getLogger(UserService.class.
             getName());
-    //CHECKSTYLE:ON ConstantName
     /**
      * Injected cache bean.
      */

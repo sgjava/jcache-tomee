@@ -34,6 +34,7 @@ import javax.enterprise.inject.Produces;
 @Singleton
 @Startup
 @Lock(READ)
+@SuppressWarnings("checkstyle:designforextension") // CDI beans not allowed to have final methods
 public class CacheBean {
 
     /**
@@ -71,8 +72,8 @@ public class CacheBean {
     /**
      * Load Properties from file.
      *
-     * @param fileName
-     * @return
+     * @param fileName Name of property file.
+     * @return Populated properties.
      */
     public Properties loadProperties(final String fileName) {
         Properties properties = new Properties();
@@ -99,11 +100,15 @@ public class CacheBean {
         // See if we have system properties
         if (!sysProperties.isEmpty()) {
             // Set all system properties
-            for (String key : sysProperties.stringPropertyNames()) {
-                System.setProperty(key, sysProperties.getProperty(key));
-                log.info(String.format("Setting system property %s=%s", key,
-                        sysProperties.getProperty(key)));
-            }
+            sysProperties.stringPropertyNames().stream().
+                    map((key) -> {
+                        System.setProperty(key, sysProperties.getProperty(key));
+                        return key;
+                    }).
+                    forEach((key) -> {
+                        log.info(String.format("Setting system property %s=%s",
+                                key, sysProperties.getProperty(key)));
+                    });
         }
         // CachingProvider.getCacheManager properties
         final Properties jcacheProperties = loadProperties(appProperties.

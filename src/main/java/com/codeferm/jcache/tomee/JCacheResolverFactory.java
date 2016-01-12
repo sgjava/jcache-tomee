@@ -26,7 +26,7 @@ public class JCacheResolverFactory implements CacheResolverFactory {
     /**
      * Logger.
      */
-    //CHECKSTYLE:OFF ConstantName - Logger OK to be static final and lower case
+    @SuppressWarnings("checkstyle:constantname") // Logger OK to be static final and lower case
     private static final Logger log = Logger.
             getLogger(CacheBean.class.getName());
     //CHECKSTYLE:ON ConstantName

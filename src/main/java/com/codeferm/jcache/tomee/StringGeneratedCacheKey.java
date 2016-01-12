@@ -24,6 +24,10 @@ import javax.cache.annotation.GeneratedCacheKey;
 public class StringGeneratedCacheKey implements GeneratedCacheKey, Serializable {
 
     /**
+     * Serial UID.
+     */
+    private static final long serialVersionUID = -1289637947085893330L;
+    /**
      * Cached hash value.
      */
     private int cachedHash;
@@ -66,8 +70,8 @@ public class StringGeneratedCacheKey implements GeneratedCacheKey, Serializable 
      */
     @Override
     public final boolean equals(final Object obj) {
-        return StringGeneratedCacheKey.class.isInstance(obj) && value
-                == StringGeneratedCacheKey.class.cast(obj).value;
+        return StringGeneratedCacheKey.class.isInstance(obj) && value.equals(
+                StringGeneratedCacheKey.class.cast(obj).value);
     }
 
     /**

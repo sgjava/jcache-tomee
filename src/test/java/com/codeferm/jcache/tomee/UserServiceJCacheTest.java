@@ -67,6 +67,8 @@ public class UserServiceJCacheTest {
 
     /**
      * Stop EJB container.
+     *
+     * @throws Exception Possible exception.
      */
     @AfterClass
     public static void stop() throws Exception {
@@ -141,5 +143,6 @@ public class UserServiceJCacheTest {
         // First one goes into cache
         UserDto response = client.target(postUrl).request().post(Entity.entity(
                 userDto, MediaType.APPLICATION_JSON), UserDto.class);
+        assertNotNull(response);
     }
 }

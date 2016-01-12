@@ -28,7 +28,7 @@ public class UserDto extends AbstractDto {
     @NotNull
     private Integer id;
     /**
-     * User name,
+     * User name.
      */
     @NotNull
     private String userName;

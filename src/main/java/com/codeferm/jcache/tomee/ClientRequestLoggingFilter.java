@@ -23,11 +23,10 @@ public class ClientRequestLoggingFilter implements ClientRequestFilter {
     /**
      * Logger.
      */
-    //CHECKSTYLE:OFF ConstantName - Logger OK to be static final and lower case
+    @SuppressWarnings("checkstyle:constantname") // Logger OK to be static final and lower case
     private static final Logger log = Logger.getLogger(
             ClientRequestLoggingFilter.class.getName());
 
-    //CHECKSTYLE:ON ConstantName
     /**
      * Display request information.
      *
@@ -44,7 +43,6 @@ public class ClientRequestLoggingFilter implements ClientRequestFilter {
             });
         });
         log.info(String.format("URI: %s", context.getUri()));
-        log.info(String.format("Method: %s", context.getMethod()));
         log.info(String.format("Headers: %s", context.getStringHeaders()));
         log.info(String.format("Entity: %s", context.getEntity()));
     }
