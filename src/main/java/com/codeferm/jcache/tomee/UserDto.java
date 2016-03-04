@@ -53,7 +53,7 @@ public class UserDto extends AbstractDto {
      * @param userName User name,
      * @param fullName Full name.
      */
-    @ConstructorProperties({"transId", "transId", "userName", "fullName"})
+    @ConstructorProperties({"transId", "id", "userName", "fullName"})
     public UserDto(final Long transId, final Integer id, final String userName,
             final String fullName) {
         super(transId);
