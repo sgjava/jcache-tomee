@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class UserDto extends AbstractDto {
+public class UserDto extends BaseDto {
 
     /**
      * Serializable object.

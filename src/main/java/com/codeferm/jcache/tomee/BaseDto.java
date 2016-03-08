@@ -11,13 +11,13 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 /**
- * Abstract DTO with common properties.
+ * Base DTO with common properties.
  *
  * @author sgoldsmith
  * @version 1.0.0
  * @since 1.0.0
  */
-public class AbstractDto implements Serializable {
+public class BaseDto implements Serializable {
 
     /**
      * Serializable object.
@@ -32,7 +32,7 @@ public class AbstractDto implements Serializable {
     /**
      * Default constructor.
      */
-    public AbstractDto() {
+    public BaseDto() {
     }
 
     /**
@@ -41,7 +41,7 @@ public class AbstractDto implements Serializable {
      * @param transId Transaction ID.
      */
     @ConstructorProperties({"transId"})
-    public AbstractDto(final Long transId) {
+    public BaseDto(final Long transId) {
         this.transId = transId;
     }
 
@@ -70,6 +70,6 @@ public class AbstractDto implements Serializable {
      */
     @Override
     public String toString() {
-        return "AbstractDto{" + "transId=" + transId + '}';
+        return "BaseDto{" + "transId=" + transId + '}';
     }
 }
