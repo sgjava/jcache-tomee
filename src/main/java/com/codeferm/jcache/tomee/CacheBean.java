@@ -47,7 +47,8 @@ public class CacheBean {
     /**
      * Application properties.
      */
-    private static final String APP_PROPS_FILE = "src/config/app.properties";
+    private static final String APP_PROPS_FILE = System.getProperty("user.home")
+            + "/config/app.properties";
     /**
      * Caching provider.
      */
@@ -76,6 +77,7 @@ public class CacheBean {
      * @return Populated properties.
      */
     public Properties loadProperties(final String fileName) {
+        log.info(String.format("Loading properties from %s", fileName));
         Properties properties = new Properties();
         try (InputStream is = new FileInputStream(fileName)) {
             properties.load(is);

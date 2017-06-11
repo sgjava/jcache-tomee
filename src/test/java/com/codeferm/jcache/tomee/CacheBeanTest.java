@@ -61,6 +61,10 @@ public class CacheBeanTest {
     @Before
     public final void start() throws NamingException {
         log.info("start()");
+        System.
+                setProperty("openejb.deploymentId.format",
+                        "{ejbJarId}/{ejbName}");
+        System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES", "*");
         container = EJBContainer.createEJBContainer();
         container.getContext().bind("inject", this);
     }

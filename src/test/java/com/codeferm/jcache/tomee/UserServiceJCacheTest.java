@@ -54,6 +54,10 @@ public class UserServiceJCacheTest {
     @BeforeClass
     public static void start() throws Exception {
         log.info("start()");
+        System.
+                setProperty("openejb.deploymentId.format",
+                        "{ejbJarId}/{ejbName}");
+        System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES", "*");
         // tomee-embedded configuration
         configuration = new Configuration().randomHttpPort();
         container = new Container();

@@ -12,8 +12,17 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import javax.cache.Cache;
 import javax.ejb.EJB;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.validation.Valid;
 import javax.validation.executable.ValidateOnExecution;
 import javax.ws.rs.Consumes;
@@ -53,6 +62,18 @@ public class UserService {
      */
     @EJB
     private KeyValueBean keyValueBean;
+    /**
+     * Injected JMS connection factory.
+     */
+    @Resource
+    private ConnectionFactory connectionFactory;
+    /**
+     * Injected MDB.
+     *
+     * For TomEE use openejb.deploymentId.format={ejbJarId}/{ejbName}
+     */
+    @Resource(name = "jcache-tomee/LogBean")
+    private Queue logBean;
     /**
      * Direct access to cache.
      */
@@ -104,10 +125,31 @@ public class UserService {
     @POST
     @ValidateOnExecution
     @Valid
-    public Response userInfo(@Valid final UserDto userDto) {
+    public Response userInfo(@Valid final UserDto userDto) throws JMSException {
         log.info(String.format("userDto: %s", userDto.toString()));
         keyValueBean.shortResult(userDto.getUserName(), userDto.getFullName());
+        sendLogMessage(userDto.toString());
         // Return UserDto
         return Response.ok(userDto).build();
+    }
+
+    /**
+     * Send text message to queue.
+     *
+     * @param text Text to send to MDB.
+     * @throws JMSException Possible exception.
+     */
+    public void sendLogMessage(final String text) throws JMSException {
+        log.info(String.format("Sending: %s", text));
+        try (Connection connection = connectionFactory.createConnection()) {
+            connection.start();
+            try (Session session = connection.createSession(false,
+                    Session.AUTO_ACKNOWLEDGE)) {
+                final MessageProducer queue = session.createProducer(logBean);
+                queue.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+                final TextMessage message = session.createTextMessage(text);
+                queue.send(message);
+            }
+        }
     }
 }
