@@ -34,7 +34,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Service to work with UserDto an test caching.
+ * Service to work with UserDto and test caching.
  *
  * @author sgoldsmith
  * @version 1.0.0
@@ -43,7 +43,7 @@ import javax.ws.rs.core.Response;
 @Path("/user/v1")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@SuppressWarnings("checkstyle:designforextension") // Proxy beans allowed to have final methods
+@SuppressWarnings("checkstyle:designforextension") // Proxy beans not allowed to have final methods
 public class UserService {
 
     /**
@@ -89,7 +89,7 @@ public class UserService {
     }
 
     /**
-     * D0 any clean up.
+     * Do any clean up.
      */
     @PreDestroy
     public void done() {

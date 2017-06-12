@@ -59,14 +59,13 @@ public class LogBean implements MessageListener {
     @SuppressWarnings({"PMD.AvoidCatchingGenericException"}) // Generic exception caught because of dependency
     public void onMessage(final Message message) {
         try {
-            // Verify message is of type ObjectMessage
+            // Verify message is of type TextMessage
             if (message instanceof TextMessage) {
                 final TextMessage textMsg = (TextMessage) message;
-                // Cast from message to DTO
                 final String text = textMsg.getText();
                 log.info(text);
             } else {
-                log.severe("Message is not type ObjectMessage");
+                log.severe("Message is not type TextMessage");
             }
         } catch (JMSException e) {
             log.severe(e.getMessage());
