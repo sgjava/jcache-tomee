@@ -47,8 +47,7 @@ public class CacheBean {
     /**
      * Application properties.
      */
-    private static final String APP_PROPS_FILE = System.getProperty("user.home")
-            + "/config/app.properties";
+    private static final String APP_PROPS_FILE = "src/config/app.properties";
     /**
      * Caching provider.
      */
@@ -125,9 +124,15 @@ public class CacheBean {
             log.info("Using no args getCacheManager()");
             cacheManager = cachingProvider.getCacheManager();
         } else {
-            cacheManager = cachingProvider.getCacheManager(new File(
-                    appProperties.getProperty("app.jcache.config.file")).toURI(),
-                    null, jcacheProperties);
+            log.info("Not using configuration file");
+            if (appProperties.getProperty("app.jcache.config.file").isEmpty()) {
+                cacheManager = cachingProvider.getCacheManager(cachingProvider.getDefaultURI(),
+                        cachingProvider.getDefaultClassLoader(), jcacheProperties);
+            } else {
+                cacheManager = cachingProvider.getCacheManager(new File(
+                        appProperties.getProperty("app.jcache.config.file")).toURI(),
+                        null, jcacheProperties);
+            }
         }
         log.info("Creating caches");
         cacheManager.createCache("shortCache", new MutableConfiguration().
