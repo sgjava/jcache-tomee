@@ -17,7 +17,7 @@ sgoldsmith@codeferm.com
         <java-api.version>1.8</java-api.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <tomee.version>7.0.3</tomee.version>
+        <tomee.version>7.0.4-SNAPSHOT</tomee.version>
     </properties>
 
     <name>JCache using TomEE</name>
