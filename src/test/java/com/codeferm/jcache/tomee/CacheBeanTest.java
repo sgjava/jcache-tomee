@@ -65,6 +65,7 @@ public class CacheBeanTest {
                 setProperty("openejb.deploymentId.format",
                         "{ejbJarId}/{ejbName}");
         System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES", "*");
+        System.setProperty("openejb.environment.default","true");
         container = EJBContainer.createEJBContainer();
         container.getContext().bind("inject", this);
     }

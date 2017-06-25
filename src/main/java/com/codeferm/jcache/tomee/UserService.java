@@ -15,14 +15,11 @@ import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.cache.Cache;
 import javax.ejb.EJB;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.DeliveryMode;
+import javax.inject.Inject;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
-import javax.jms.MessageProducer;
 import javax.jms.Queue;
-import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.validation.Valid;
 import javax.validation.executable.ValidateOnExecution;
 import javax.ws.rs.Consumes;
@@ -63,10 +60,10 @@ public class UserService {
     @EJB
     private KeyValueBean keyValueBean;
     /**
-     * Injected JMS connection factory.
+     * Injected JMS Context.
      */
-    @Resource
-    private ConnectionFactory connectionFactory;
+    @Inject
+    JMSContext jmsContext;
     /**
      * Injected MDB.
      *
@@ -134,22 +131,13 @@ public class UserService {
     }
 
     /**
-     * Send text message to queue.
+     * Send text message to queue. Uses JMS 2.0 API.
      *
      * @param text Text to send to MDB.
      * @throws JMSException Possible exception.
      */
     public void sendLogMessage(final String text) throws JMSException {
         log.info(String.format("Sending: %s", text));
-        try (Connection connection = connectionFactory.createConnection()) {
-            connection.start();
-            try (Session session = connection.createSession(false,
-                    Session.AUTO_ACKNOWLEDGE)) {
-                final MessageProducer queue = session.createProducer(logBean);
-                queue.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-                final TextMessage message = session.createTextMessage(text);
-                queue.send(message);
-            }
-        }
+        jmsContext.createProducer().send(logBean, text);
     }
 }
