@@ -16,7 +16,6 @@ import javax.annotation.Resource;
 import javax.cache.Cache;
 import javax.ejb.EJB;
 import javax.inject.Inject;
-import javax.jms.JMSConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Queue;
