@@ -1,6 +1,4 @@
 ![Title](images/title.png)
-
-### JCache using TomEE 7.0.5
 * Unit tests provide examples
 * JAX-RS using CDI bean and JCache annotations
 * JAX-RS bean validation
