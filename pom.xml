@@ -34,6 +34,30 @@ sgoldsmith@codeferm.com
                     <target>${java-api.version}</target>
                 </configuration>
             </plugin>
+            <!-- Copy config to target, so tomee:run works -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/apache-tomee/config</outputDirectory>
+                            <resources>          
+                                <resource>
+                                    <directory>config</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
+                </executions>
+            </plugin>            
             <!-- Build WAR file -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -61,6 +85,10 @@ sgoldsmith@codeferm.com
                 <artifactId>tomee-maven-plugin</artifactId>
                 <version>${tomee.version}</version>
                 <configuration>
+                    <!-- Must set for default JMS factory to be created -->
+                    <systemVariables>
+                        <openejb.environment.default>true</openejb.environment.default>
+                    </systemVariables>                    
                     <tomeeVersion>${tomee.version}</tomeeVersion>
                     <tomeeClassifier>plus</tomeeClassifier>
                     <zip>false</zip>

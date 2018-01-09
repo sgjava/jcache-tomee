@@ -23,7 +23,7 @@ import org.junit.Test;
  * @version 1.0.0
  * @since 1.0.0
  */
-@Ignore // Uncomment after Maven clean install goals (to build war), then run tomee:run before running this test
+@Ignore // Comment after Maven clean install goals (to build war), then run tomee:run before running this test
 public class RemoteUserServiceJCacheTest {
 
     /**

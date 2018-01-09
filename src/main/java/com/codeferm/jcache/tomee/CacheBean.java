@@ -47,7 +47,7 @@ public class CacheBean {
     /**
      * Application properties.
      */
-    private static final String APP_PROPS_FILE = "src/config/app.properties";
+    private static final String APP_PROPS_FILE = "config/app.properties";
     /**
      * Caching provider.
      */
