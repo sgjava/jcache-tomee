@@ -8,7 +8,7 @@
  sgoldsmith@codeferm.com
 -->
 
-<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.8.xsd"
+<hazelcast xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-3.9.xsd"
            xmlns="http://www.hazelcast.com/schema/config"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <group>
@@ -193,6 +193,23 @@
         <cache-deserialized-values>INDEX-ONLY</cache-deserialized-values>
 
     </map>
+
+    <!--
+       Configuration for an event journal. The event journal keeps events related
+       to a specific partition and data structure. For instance, it could keep
+       map add, update, remove, merge events along with the key, old value, new value and so on.
+    -->
+    <event-journal enabled="false">
+        <mapName>mapName</mapName>
+        <capacity>10000</capacity>
+        <time-to-live-seconds>0</time-to-live-seconds>
+    </event-journal>
+
+    <event-journal enabled="false">
+        <cacheName>cacheName</cacheName>
+        <capacity>10000</capacity>
+        <time-to-live-seconds>0</time-to-live-seconds>
+    </event-journal>
 
     <multimap name="default">
         <backup-count>1</backup-count>

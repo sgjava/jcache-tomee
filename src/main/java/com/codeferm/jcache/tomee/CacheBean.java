@@ -94,6 +94,7 @@ public class CacheBean {
     //CHECKSTYLE:ON DesignForExtension
     public void init() {
         log.info("PostConstruct");
+        log.info(String.format("user.dir = %s",System.getProperty("user.dir")));
         // App properties
         final Properties appProperties = loadProperties(APP_PROPS_FILE);
         final Properties sysProperties = loadProperties(appProperties.
