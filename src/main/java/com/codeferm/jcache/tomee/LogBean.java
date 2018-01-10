@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) Steven P. Goldsmith. All rights reserved.
+ *
+ * Created by Steven P. Goldsmith on July 3, 2016
+ * sgoldsmith@codeferm.com
+ */
 package com.codeferm.jcache.tomee;
 
 import java.util.logging.Logger;
@@ -10,11 +16,17 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-/*
- * Copyright (c) Steven P. Goldsmith. All rights reserved.
+/**
+ * MDB used for asynchronous logger. This could be used for heavy duty logging
+ * where the logger implementation is not required to be asynchronous. Some
+ * logging implementations such as RDBMS database loggers are notoriously slow.
+ * Obviously order is not important here as multiple MDBs could log the message
+ * out of order. If order is important then a unique ascending id of some sort
+ * would be required.
  *
- * Created by Steven P. Goldsmith on July 3, 2016
- * sgoldsmith@codeferm.com
+ * @author sgoldsmith
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @MessageDriven(activationConfig = {
     @ActivationConfigProperty(propertyName = "maxSessions", propertyValue

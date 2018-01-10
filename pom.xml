@@ -34,14 +34,13 @@ sgoldsmith@codeferm.com
                     <target>${java-api.version}</target>
                 </configuration>
             </plugin>
-            <!-- Copy config to target, so tomee:run works -->
+            <!-- Copy config to target, so tomee:run works without any code changes-->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
-                        <!-- here the phase you need -->
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy-resources</goal>

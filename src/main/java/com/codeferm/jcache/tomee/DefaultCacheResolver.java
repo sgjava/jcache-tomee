@@ -12,7 +12,8 @@ import javax.cache.annotation.CacheInvocationContext;
 import javax.cache.annotation.CacheResolver;
 
 /**
- * Default cache resolver.
+ * Default {@link javax.cache.annotation.CacheResolver} implementation for
+ * standalone environments, where no Cache/CacheManagers are injected via CDI.
  *
  * @author sgoldsmith
  * @version 1.0.0
@@ -41,7 +42,8 @@ public class DefaultCacheResolver implements CacheResolver {
     }
 
     /**
-     *
+     * Resolve the Cache to use for the CacheInvocationContext.
+     * 
      * @param <K> Cache key type.
      * @param <V> Cache value type.
      * @param cacheInvocationContext The context data for the intercepted method

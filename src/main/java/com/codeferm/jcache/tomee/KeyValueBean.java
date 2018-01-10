@@ -17,7 +17,7 @@ import javax.cache.annotation.CacheValue;
 import javax.ejb.Singleton;
 
 /**
- * Stateless bean using JCache annotations.
+ * Singleton bean using JCache annotations. Value is stored in cache by key.
  *
  * @author sgoldsmith
  * @version 1.0.0

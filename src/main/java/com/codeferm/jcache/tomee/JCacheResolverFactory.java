@@ -18,7 +18,9 @@ import javax.cache.configuration.MutableConfiguration;
 import javax.inject.Inject;
 
 /**
- *
+ * Configure your cache using a custom CacheProvider and CacheManager for both
+ * data cache and exceptions cache.
+ * 
  * @author sgoldsmith
  */
 public class JCacheResolverFactory implements CacheResolverFactory {
@@ -60,8 +62,7 @@ public class JCacheResolverFactory implements CacheResolverFactory {
             log.warning(String.format(
                     "No Cache named '%s' was found in the CacheManager, a default cache will be created",
                     cacheName));
-            cacheManager.createCache(cacheName,
-                    new MutableConfiguration<Object, Object>());
+            cacheManager.createCache(cacheName, new MutableConfiguration<>());
             cache = cacheManager.getCache(cacheName);
         }
         return new DefaultCacheResolver(cache);
@@ -91,8 +92,7 @@ public class JCacheResolverFactory implements CacheResolverFactory {
             log.warning(String.format(
                     "No Cache named '%s' was found in the CacheManager, a default cache will be created",
                     exceptionCacheName));
-            cacheManager.createCache(exceptionCacheName,
-                    new MutableConfiguration<Object, Object>());
+            cacheManager.createCache(exceptionCacheName, new MutableConfiguration<>());
             cache = cacheManager.getCache(exceptionCacheName);
         }
         return new DefaultCacheResolver(cache);
